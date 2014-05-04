@@ -25,6 +25,8 @@ Run Project
 - Signup
 - Logout
 - Profile
+- Nodemailer
+- Sweetcaptcha
 - AngularJS
 - Bower
 

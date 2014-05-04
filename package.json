@@ -1,6 +1,6 @@
 {
     "name": "joy",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "description": "A awesome sails stack",
     "homepage": "https://github.com/chrisenytc/joy",
     "private": true,
@@ -42,7 +42,6 @@
         "passport-oauth2-client-password": "~0.1.1",
         "passport-http-bearer": "~1.0.1",
         "passport-local": "~0.1.6",
-        "amnc": "~0.1.0",
         "nodemailer": "~0.6.1",
         "sweetcaptcha": "0.0.2",
         "grunt": "0.4.1",
