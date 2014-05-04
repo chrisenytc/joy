@@ -2,11 +2,17 @@
  * User
  *
  * @module      :: Model
- * @description :: A short summary of how this model works and what it represents.
+ * @description :: A user model
  *
  */
 
 var crypto = require('crypto');
+
+function hashed(values, next) {
+    var hashed_password = crypto.createHash('whirlpool').update(values.password).digest('hex');
+    values.password = hashed_password;
+    return next();
+};
 
 module.exports = {
 
@@ -30,7 +36,7 @@ module.exports = {
 
         status: {
             type: 'BOOLEAN',
-            required: true
+            defaultsTo: false
         },
 
         checkPassword: function(password) {
@@ -41,8 +47,25 @@ module.exports = {
 
     // Lifecycle Callbacks
     beforeValidation: function(values, next) {
-        var hashed_password = crypto.createHash('whirlpool').update(values.password).digest('hex');
-        values.password = hashed_password;
-        return next();
+        User.findOne({
+            email: values.email
+        }).done(function(err, user) {
+            if(err) {
+                return next(err);
+            }
+            if(!user) {
+                return next();
+            }
+            if(user.email === values.email) {
+                return next();
+            }
+            return next('This email already exists!');
+        });
+    },
+    beforeCreate: function(values, next) {
+        return hashed(values, next);
+    },
+    beforeUpdate: function(values, next) {
+        return hashed(values, next);
     }
 };

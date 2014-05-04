@@ -9,12 +9,11 @@
 var passport = require('passport');
 
 module.exports = function(req, res, next) {
-    console.log('Called');
     passport.authenticate(
         'bearer',
         function(err, user, info) {
             if ((err) || (!user)) {
-                return res.jsonp({msg: 'Bad Authentication. You do not have permission to access the API.'});
+                return res.jsonp({msg: 'Bad Authentication. You do not have permission to access the API!'});
             }
             delete req.query.access_token;
             req.user = user;

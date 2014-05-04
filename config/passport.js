@@ -35,19 +35,17 @@ passport.use(new LocalStrategy({
         if (err) {
             return done(err);
         }
-
         if (!user) {
             return done(
-                null, false, {
-                    message: 'Unknown user ' + email
-                });
+                null, false, req.flash('error', 'Unknown user ' + email));
         }
-
         if (!user.checkPassword(password)) {
             return done(
-                null, false, {
-                    message: 'Invalid password'
-                });
+                null, false, req.flash('error', 'Invalid password!'));
+        }
+        if (!user.status) {
+            return done(
+                null, false, req.flash('alert', 'You need to active your account to login!'));
         }
         return done(null, user);
     });

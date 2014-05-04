@@ -1,0 +1,40 @@
+<!-- Notification -->
+<div notification></div>
+
+<div class="posts pure-g">
+    <h1 class="content-subhead pure-u-1">Signup</h1>
+
+    <section class="post pure-u-1">
+        <form class="pure-form pure-form-stacked" name="signupForm" novalidate>
+            <fieldset>
+
+                <label for="name">Name</label>
+                <input id="name" name="name" type="text" placeholder="Enter your name" ng-model="user.name" required>
+                <p ng-show="signupForm.name.$invalid && !signupForm.name.$pristine">
+                    <strong class="text-danger">Your name is required.</strong>
+                </p>
+
+                <label for="email">Email</label>
+                <input id="email" name="email" type="email" placeholder="Enter your email" ng-model="user.email" required>
+                <p ng-show="signupForm.email.$invalid && !signupForm.email.$pristine">
+                    <strong class="text-danger">Your email is required.</strong>
+                </p>
+
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="Enter your password" ng-model="user.password" required>
+                <p ng-show="signupForm.password.$invalid && !signupForm.password.$pristine">
+                    <strong class="text-danger">Your password is required.</strong>
+                </p>
+
+                <p class="captcha">
+                    <!-- Captcha -->
+                    <div captcha></div>
+                </p>
+
+                <p>
+                    <a href="#" class="pure-button pure-button-success" ng-click="submit(signupForm.$valid)" ng-disabled="signupForm.$invalid">Create my account</a>
+                </p>
+            </fieldset>
+        </form>
+    </section>
+</div>

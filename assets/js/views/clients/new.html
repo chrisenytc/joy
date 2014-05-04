@@ -1,0 +1,20 @@
+<!-- Notification -->
+<div notification></div>
+
+<form name="createClientForm" novalidate>
+    <p>
+        <input id="name" name="name" type="text" placeholder="Enter a name" ng-model="client.name" required>
+    </p>
+    <p ng-show="createClientForm.name.$invalid && !createClientForm.name.$pristine">
+        <strong class="text-danger">Your application name is required.</strong>
+    </p>
+    <p>
+        <input id="callback" name="redirectURI" type="text" placeholder="Enter a callback url" ng-model="client.redirectURI" required>
+    </p>
+    <p ng-show="createClientForm.redirectURI.$invalid && !createClientForm.redirectURI.$pristine">
+        <strong class="text-danger">Your callback url is required.</strong>
+    </p>
+    <p>
+        <a href="#" class="pure-button pure-button-success" ng-click="submit(createClientForm.$valid)" ng-disabled="createClientForm.$invalid">Create</a>
+    </p>
+</form>

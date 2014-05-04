@@ -1,0 +1,8 @@
+<aside class="pure-alert-{{ notification.type }}" ng-show="notification.show">
+    <ul ng-show="notification.isArray">
+        <li ng-repeat="message in notification.message track by $index">
+            <span ng-bind="message"></span>
+        </li>
+    </ul>
+    <p ng-hide="notification.isArray" ng-bind="notification.message"></p>
+</aside>

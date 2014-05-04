@@ -26,7 +26,7 @@ exports.uid = function(len) {
  * Return a unique_token identifier in database
  *
  *     utils.unique_token();
- *     // => "FDaS435D2z"
+ *     // => "C2rSNV2sBpYBWeqfnNxT4WW2axB7TCoFxZIAYeMKhFtAqNQf0k3cTa186I9ueZqeGCK4WQDHgNArAElCP0XbL4EPEafyy3gmgvq1ZAPmSsPX20GhlpR9bLzCHxMMgZNfJGoCAmq2c9RcE9a2Nf3MkQAGZJrvfPAST6ijLCSkjE27jRtUitujV8VzLUWsW6bZWw671iaPZ0e1cuumUHALKfdLiBVeUYuVoBkSxGqw6CrQcEGHHiA62MaTRkxdB6r4"
  *
  * @return {String}
  * @api private

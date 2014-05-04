@@ -1,4 +1,4 @@
-# Joy.js [![GH version](https://badge-me.herokuapp.com/api/gh/chrisenytc/joy.png)](http://joy.chrisenytc.com/for/gh/chrisenytc/joy)
+# Joy.js [![GH version](https://badge-me.herokuapp.com/api/gh/chrisenytc/joy.png)](http://badges.enytc.com/for/gh/chrisenytc/joy)
 
 > A awesome sails stack
 
@@ -18,13 +18,15 @@ Run Project
 
 ## Contains
 
-- * Oauth2
-- * Oauth2 clients
-- * Passport
-- * Login
-- * Signup
-- * Logout
-- * Profile
+- Oauth2
+- Oauth2 clients
+- Passport
+- Login
+- Signup
+- Logout
+- Profile
+- AngularJS
+- Bower
 
 ## Contributing
 

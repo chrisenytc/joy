@@ -5,53 +5,110 @@
  * @description :: Contains logic for handling auth requests.
  */
 
-var passport = require('passport');
+var passport = require('passport'),
+    utils = require('../../utils.js');
 
 module.exports = {
 
     /**
      * Action blueprints:
-     *    `/auth/create`
+     *    `post /signup`
      */
-    create: function(req, res, next) {
+    create: function(req, res) {
 
-        //Create a new user
-        User.create({
-            name: req.body.name,
-            email: req.body.email,
-            password: req.body.password,
-            status: true
-        }).done(function(err, user) {
-            if (err) {
-                return next(err);
+        req.validateCaptcha(function(err, isValid) {
+            //Check captcha
+            if (!isValid) {
+                return res.serverError('You did not answer the captcha correctly. Try again!');
             }
-            passport.authenticate(
-                'local',
-                function(err, cuser, info) {
-                    if ((err) || (!user)) {
-                        // Send a response
-                        return res.redirect('/login');
-                    }
-                    // use passport to log in the user using a local method
-                    req.logIn(
-                        user,
-                        function(err) {
-                            if (err) {
-                                // Send a response
-                                return res.redirect('/login');
-                            }
-                            // Send a response
-                            return res.redirect('/users');
-                        }
-                    );
+            //Create a new user
+            User.create({
+                name: req.body.name,
+                email: req.body.email,
+                password: req.body.password
+            }).done(function(err, user) {
+                if (err) {
+                    return res.serverError(err);
                 }
-            )(req, res);
+                //Generate token
+                var token = utils.unique_token();
+                Activate.create({
+                    email: user.email,
+                    token: token
+                }).done(function(err, token) {
+                    return res.serverError(err);
+                });
+                //Send Email
+                res.sendMail('Welcome to Joy', user.email, 'mail/signup', {
+                    user: user,
+                    token: token,
+                    appUrl: sails.config.appUrl
+                });
+                //Send message
+                return res.sendResponse(200, {
+                    msg: 'An email with the your activation token has been sent to your email!'
+                });
+            });
         });
+    },
+
+
+    /**
+     * Action blueprints:
+     *    `post /signup/activate`
+     */
+    update: function(req, res) {
+
+        //Find activation
+        Activate.findOne({
+            token: req.body.token
+        }).done(function(err, token) {
+            if (err) {
+                return res.serverError(err);
+            }
+            if (!token) {
+                return res.serverError('This token is invalid!');
+            }
+            User.findOne({
+                email: token.email
+            }).done(function(err, user) {
+                if (err) {
+                    return res.serverError(err);
+                }
+                if (!user) {
+                    return res.serverError('User not found!');
+                }
+                //Activate
+                user.status = true;
+                //Save
+                user.save(function(err) {
+                    if (err) {
+                        return res.serverError(err);
+                    }
+                });
+                //Remove token
+                token.destroy(function(err) {
+                    if (err) {
+                        return res.serverError(err);
+                    }
+                });
+                //Send Email
+                res.sendMail('Your account is Activated', user.email, 'mail/activate', {
+                    user: user,
+                    appUrl: sails.config.appUrl
+                });
+                //Send message
+                return res.sendResponse(200, {
+                    msg: 'Your account has been activated!'
+                });
+            });
+        });
+
     },
 
     /**
      * Action blueprints:
-     *    `/auth/process`
+     *    `post /login`
      */
     process: function(req, res) {
         passport.authenticate(
@@ -73,7 +130,7 @@ module.exports = {
                             return res.redirect(req.body.redirect);
                         } else {
                             // Send a response
-                            return res.redirect('/users');
+                            return res.redirect('/');
                         }
                     }
                 );
@@ -83,30 +140,39 @@ module.exports = {
 
     /**
      * Action blueprints:
-     *    `/auth/signup`
+     *    `/signup`
      */
 
     signup: function(req, res) {
         // Send a response
-        return res.render('signup');
+        return res.render('users/signup');
     },
 
     /**
      * Action blueprints:
-     *    `/auth/login`
+     *    `/signup/activate`
+     */
+
+    activate: function(req, res) {
+        // Send a response
+        return res.render('users/activate');
+    },
+
+    /**
+     * Action blueprints:
+     *    `/login`
      */
 
     login: function(req, res) {
         // Send a response
-        return res.render('login', {
-            msg: req.query.msg,
+        return res.render('users/login', {
             redirect: req.query.redirect
         });
     },
 
     /**
      * Action blueprints:
-     *    `/auth/logout`
+     *    `/logout`
      */
 
     logout: function(req, res) {

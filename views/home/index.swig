@@ -1,4 +1,4 @@
-{% extends '../layout.swig' %}
+{% extends '../layouts/default.swig' %}
 {% block title %}
 Getting Started
 {% endblock %}
@@ -40,6 +40,6 @@ Don't worry, we've got your back.
     </ul>
 </div>
 <div class="delete">
-    <div class="sprite">You're looking at: <span class="boxy">views/home/index.ejs</span></div>
+    <div class="sprite">You're looking at: <span class="boxy">views/home/index.swig</span></div>
 </div>
 {% endblock %}

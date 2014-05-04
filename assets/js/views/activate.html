@@ -1,0 +1,23 @@
+<!-- Notification -->
+<div notification></div>
+
+<div class="posts pure-g">
+    <h1 class="content-subhead pure-u-1">Activate</h1>
+
+    <section class="post pure-u-1">
+        <form class="pure-form pure-form-stacked" name="activateForm" novalidate ng-hide="isToken()">
+            <fieldset>
+
+                <label for="token">Activation Token</label>
+                <input id="token" name="token" type="text" placeholder="Enter your activation token" ng-model="token" required>
+                <p ng-show="activateForm.token.$invalid && !activateForm.token.$pristine">
+                    <strong class="text-danger">Your activation token is required.</strong>
+                </p>
+
+                <p>
+                    <a href="#" class="pure-button pure-button-success" ng-click="submit(activateForm.$valid)" ng-disabled="activateForm.$invalid">Activate my account</a>
+                </p>
+            </fieldset>
+        </form>
+    </section>
+</div>

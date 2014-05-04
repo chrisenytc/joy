@@ -22,21 +22,19 @@ module.exports = {
 
     /**
      * Action blueprints:
-     *    `/clients/index`
-     *    `/clients`
+     *    `/apps`
      */
-    index: function(req, res, next) {
+    index: function(req, res) {
 
         Client.find({
             userId: req.user.id
         }).done(function(err, clients) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
             }
             // Send a response
-            return res.render('client/index', {
-                clients: clients,
-                msg: req.query.msg
+            return res.render('clients/index', {
+                clients: clients
             });
         });
     },
@@ -44,20 +42,38 @@ module.exports = {
 
     /**
      * Action blueprints:
-     *    `/clients/new`
+     *    `/clients`
      */
-    new: function(req, res) {
+    clients: function(req, res) {
 
-        // Send a response
-        return res.render('client/new');
+        Client.find({
+            userId: req.user.id
+        }).done(function(err, clients) {
+            if (err) {
+                return res.serverError(err);
+            }
+            // Send a JSON response
+            return res.sendResponse(200, clients);
+        });
     },
 
 
     /**
      * Action blueprints:
-     *    `/clients/create`
+     *    `/apps/new`
      */
-    create: function(req, res, next) {
+    new: function(req, res) {
+
+        // Send a response
+        return res.render('clients/new');
+    },
+
+
+    /**
+     * Action blueprints:
+     *    `post /clients`
+     */
+    create: function(req, res) {
 
         //Create a new client
         Client.create({
@@ -68,28 +84,33 @@ module.exports = {
             userId: req.user.id
         }).done(function(err, client) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
             }
-            // Send a response
-            return res.redirect('/clients?msg=Client created successfully!');
+            // Send a JSON response
+            return res.sendResponse(200, {
+                msg: 'Client created successfully!'
+            });
         });
     },
 
     /**
      * Action blueprints:
-     *    `/clients/edit/:id`
+     *    `/apps/:id/edit`
      */
-    edit: function(req, res, next) {
+    edit: function(req, res) {
 
         Client.findOne({
             _id: req.params.id,
             userId: req.user.id
         }).done(function(err, client) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
+            }
+            if (!client) {
+                return res.serverError('Client not found!');
             }
             // Send a response
-            return res.render('client/edit', {
+            return res.render('clients/edit', {
                 client: client
             });
         });
@@ -99,26 +120,27 @@ module.exports = {
      * Action blueprints:
      *    `/clients/:id`
      */
-    find: function(req, res, next) {
+    find: function(req, res) {
 
         Client.findOne({
             _id: req.params.id,
             userId: req.user.id
         }).done(function(err, client) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
             }
-            // Send a response
-            return res.render('client/show', {
-                client: client
-            });
+            if (!client) {
+                return res.serverError('Client not found!');
+            }
+            // Send a JSON response
+            return res.sendResponse(200, client);
         });
     },
 
 
     /**
      * Action blueprints:
-     *    `/clients/update/:id`
+     *    `put /clients/:id`
      */
     update: function(req, res) {
 
@@ -127,7 +149,10 @@ module.exports = {
             userId: req.user.id
         }).done(function(err, client) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
+            }
+            if (!client) {
+                return res.serverError('Client not found!');
             }
             if (req.body.hasOwnProperty('name') && req.body.name !== '') {
                 client.name = req.body.name;
@@ -136,8 +161,13 @@ module.exports = {
                 client.redirectURI = req.body.redirectURI;
             }
             client.save(function(err) {
-                // Send a response
-                return res.redirect('/clients?msg=Client updated successfully!');
+                if (err) {
+                    return res.serverError(err);
+                }
+                // Send a JSON response
+                return res.sendResponse(200, {
+                    msg: 'Client updated successfully!'
+                });
             });
         });
     },
@@ -145,7 +175,7 @@ module.exports = {
 
     /**
      * Action blueprints:
-     *    `/clients/destroy`
+     *    `delete /clients/:id`
      */
     destroy: function(req, res) {
 
@@ -154,11 +184,19 @@ module.exports = {
             userId: req.user.id
         }).done(function(err, client) {
             if (err) {
-                return next(err);
+                return res.serverError(err);
+            }
+            if (!client) {
+                return res.serverError('Client not found!');
             }
             client.destroy(function(err) {
-                // Send a response
-                return res.redirect('/clients?msg=Client removed successfully!');
+                if (err) {
+                    return res.serverError(err);
+                }
+                // Send a JSON response
+                return res.sendResponse(200, {
+                    msg: 'Client removed successfully!'
+                });
             });
         });
     },

@@ -47,6 +47,36 @@ module.exports.routes = {
         action: 'signup'
     },
 
+    'post /signup/activate': {
+        controller: 'Auth',
+        action: 'update'
+    },
+
+    '/signup/activate': {
+        controller: 'Auth',
+        action: 'activate'
+    },
+
+    'post /forgot': {
+        controller: 'Forgot',
+        action: 'create'
+    },
+
+    'post /forgot/reset': {
+        controller: 'Forgot',
+        action: 'reset'
+    },
+
+    '/forgot': {
+        controller: 'Forgot',
+        action: 'index'
+    },
+
+    '/signup': {
+        controller: 'Auth',
+        action: 'signup'
+    },
+
     'post /login': {
         controller: 'Auth',
         action: 'process'
@@ -61,6 +91,55 @@ module.exports.routes = {
         controller: 'Auth',
         action: 'logout'
     },
+
+    // User Routes 
+
+    '/account': {
+        controller: 'User',
+        action: 'index'
+    },
+
+    // Client Routes
+
+    '/apps': {
+        controller: 'Client',
+        action: 'index'
+    },
+
+    'post /clients': {
+        controller: 'Client',
+        action: 'create'
+    },
+
+    '/clients': {
+        controller: 'Client',
+        action: 'clients'
+    },
+
+    '/apps/new': {
+        controller: 'Client',
+        action: 'new'
+    },
+
+    '/apps/:id/edit': {
+        controller: 'Client',
+        action: 'edit'
+    },
+
+    'put /clients/:id': {
+        controller: 'Client',
+        action: 'update'
+    },
+
+    'delete /clients/:id': {
+        controller: 'Client',
+        action: 'destroy'
+    },
+
+    '/clients/:id': {
+        controller: 'Client',
+        action: 'find'
+    }
 
     /*
   // But what if you want your home page to display

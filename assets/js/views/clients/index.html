@@ -1,0 +1,15 @@
+<!-- Notification -->
+<div notification></div>
+
+<div class="steps">
+    <ul class="getting-started">
+        <li ng-repeat="client in clientsList">
+            <div>
+                <a href="/apps/{{ client.id }}/edit">
+                    <h3>{{ client.name }}</h3>
+                </a>
+            </div>
+        </li>
+    </ul>
+    <a href="/apps/new" target="_self">Create a new client</a>
+</div>

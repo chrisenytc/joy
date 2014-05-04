@@ -20,30 +20,15 @@ module.exports = {
 
     /**
      * Action blueprints:
-     *    `/users/index`
-     *    `/users`
+     *    `/account`
      */
     index: function(req, res) {
 
         // Send a response
-        return res.render('user/index', {
+        return res.render('users/index', {
             user: req.user
         });
     },
-
-    /**
-     * Action blueprints:
-     *    `/users/info`
-     */
-    info: function(req, res) {
-
-        // Send a JSON response
-        return res.jsonp({
-            user: req.user
-        });
-    },
-
-
 
 
     /**

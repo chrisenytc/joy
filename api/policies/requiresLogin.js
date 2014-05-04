@@ -17,5 +17,6 @@ module.exports = function(req, res, next) {
 
     // User is not allowed
     // (default res.forbidden() behavior can be overridden in `config/403.js`)
-    return res.redirect('/login?msg=You must be logged in to access this page!&redirect=' + req.originalUrl);
+    req.flash('alert', 'You must be logged in to access this page!');
+    return res.redirect('/login?redirect=' + req.originalUrl || '/');
 };
