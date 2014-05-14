@@ -1,17 +1,19 @@
 'use strict';
 
-app.controller('signupCtrl', ['$scope', '$http', '$settings',
-    function signupCtrl($scope, $http, $settings) {
+app.controller('signupCtrl', ['$scope', '$http', '$settings', 'vcRecaptchaService',
+    function signupCtrl($scope, $http, $settings, vcRecaptchaService) {
 
         var $ = jQuery;
-        $scope.user = {};
+        $scope.user = {},
+        $scope.recaptcha = {
+            key: '6LeYhvMSAAAAALKpLXVHgiM_W_WovgVaY4DnxoIK'
+        };
 
         $scope.submit = function(isValid) {
             if (isValid) {
                 $scope.loading = true;
                 var newUser = $scope.user;
-                newUser.sckey = $('input[name="sckey"]').val();
-                newUser.scvalue = $('input[name="scvalue"]').val();
+                newUser.recaptcha = vcRecaptchaService.data();
                 $http.post($settings.apiUri + '/signup', newUser)
                     .success(function(data, status) {
                         if (status == 200) {
@@ -34,6 +36,7 @@ app.controller('signupCtrl', ['$scope', '$http', '$settings',
                             message: data.errors
                         };
                         $scope.loading = false;
+                        vcRecaptchaService.reload();
                     });
             }
         };

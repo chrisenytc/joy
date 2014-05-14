@@ -28,6 +28,16 @@ module.exports = {
     return res.render('home/index');
   },
 
+  /**
+   * Action blueprints:
+   *    `/`
+   */
+   info: function (req, res) {
+    
+    // Send a JSON response
+    return res.sendResponse(200, req.user);
+  },
+
 
   /**
    * Overrides for the settings in `config/controllers.js`

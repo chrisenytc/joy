@@ -2,17 +2,11 @@
  * User
  *
  * @module      :: Model
- * @description :: A user model
- *
+ * @description :: A short summary of how this model works and what it represents.
+ * @docs        :: http://sailsjs.org/#!documentation/models
  */
 
-var crypto = require('crypto');
-
-function hashed(values, next) {
-    var hashed_password = crypto.createHash('whirlpool').update(values.password).digest('hex');
-    values.password = hashed_password;
-    return next();
-};
+var bcrypt = require('bcrypt');
 
 module.exports = {
 
@@ -29,9 +23,8 @@ module.exports = {
             unique: true
         },
 
-        password: {
-            type: 'STRING',
-            required: true
+        hashedPassword: {
+            type: 'string',
         },
 
         status: {
@@ -40,32 +33,45 @@ module.exports = {
         },
 
         checkPassword: function(password) {
-            return crypto.createHash('whirlpool').update(password).digest('hex') === this.password;
+            var pwdCompare = bcrypt.compareSync(password, this.hashedPassword);
+            if (pwdCompare) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        // Override toJSON method to remove password from API
+        toJSON: function() {
+            var obj = this.toObject();
+            delete obj.hashedPassword;
+            return obj;
         }
-
     },
-
     // Lifecycle Callbacks
     beforeValidation: function(values, next) {
         User.findOne({
             email: values.email
         }).done(function(err, user) {
-            if(err) {
+            if (err) {
                 return next(err);
             }
-            if(!user) {
+            if (!user) {
                 return next();
             }
-            if(user.email === values.email) {
+            if (user.email === values.email) {
                 return next();
             }
             return next('This email already exists!');
         });
     },
     beforeCreate: function(values, next) {
-        return hashed(values, next);
-    },
-    beforeUpdate: function(values, next) {
-        return hashed(values, next);
+        bcrypt.hash(values.password, 10, function(err, hash) {
+            if (err) return next(err);
+            values.hashedPassword = hash;
+            delete values.password;
+            return next();
+        });
     }
+
 };

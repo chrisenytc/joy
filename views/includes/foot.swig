@@ -6,6 +6,8 @@
 <script type="text/javascript" src="/js/app.js"></script>
 <!-- jQuery -->
 <script type="text/javascript" src="/lib/jquery/jquery.min.js"></script>
+<!-- ReCaptcha API -->
+<script type="text/javascript" src="https://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 <!-- Angular -->
 <script type="text/javascript" src="/lib/angular/angular.min.js"></script>
 <!-- Angular Route -->
@@ -14,6 +16,8 @@
 <script type="text/javascript" src="/lib/angular-resource/angular-resource.min.js"></script>
 <!-- Angular MD5 -->
 <script type="text/javascript" src="/lib/angular-md5/angular-md5.min.js"></script>
+<!-- Angular ReCaptcha -->
+<script type="text/javascript" src="/lib/angular-recaptcha/release/angular-recaptcha.min.js"></script>
 <!-- Application -->
 <script type="text/javascript" src="/js/main.js"></script>
 <!-- Service -->

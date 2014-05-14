@@ -1,5 +1,5 @@
 /**
- * AuthCode
+ * AccessToken
  *
  * @module      :: Model
  * @description :: A short summary of how this model works and what it represents.
@@ -9,10 +9,6 @@
 module.exports = {
 
     attributes: {
-
-        code: {
-            type: 'string',
-        },
 
         userId: {
             type: 'string',
@@ -24,15 +20,14 @@ module.exports = {
             required: true
         },
 
-        redirectURI: {
-            type: 'string',
-            required: true
-        }
+        token: 'string',
+        
+        scope: 'string'
 
     },
 
     beforeCreate: function(values, next) {
-        values.code = UtilsService.uid(16);
+        values.token = UtilsService.unique_token();
         next();
     }
 

@@ -15,17 +15,9 @@ module.exports = {
             required: true
         },
 
-        clientId: {
-            type: 'STRING',
-            required: true,
-            unique: true
-        },
-
-        clientSecret: {
-            type: 'STRING',
-            required: true,
-            unique: true
-        },
+        clientId: 'string',
+        
+        clientSecret: 'string',
 
         redirectURI: {
             type: 'STRING',
@@ -35,8 +27,19 @@ module.exports = {
         userId: {
             type: 'String',
             required: true
+        },
+
+        trusted: {
+            type: 'boolean',
+            defaultsTo: false
         }
 
+    },
+
+    beforeCreate: function(values, next) {
+        values.clientId = UtilsService.uid(16);
+        values.clientSecret = UtilsService.unique_token();
+        next();
     }
 
 };

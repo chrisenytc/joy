@@ -18,17 +18,198 @@ Run Project
 
 ## Contains
 
-- Oauth2
+- Oauth2 provider
 - Oauth2 clients
 - Passport
 - Login
 - Signup
+- Activation
 - Logout
 - Profile
 - Nodemailer
-- Sweetcaptcha
+- Recaptcha
 - AngularJS
 - Bower
+- Swig
+- Moment
+
+
+## Addons on Views
+
+#### user
+
+The `user` contains informations about the current user
+
+How to use this property
+
+```html
+<h1>{{ user.name }}</h1>
+```
+
+#### md5(string)
+
+**Parameter**: `string`
+**Type**: `String`
+**Example**: `mystringtohash`
+
+
+The `md5` method is responsible for encrypt string to md5
+
+How to use this method
+
+```html
+{{ md5('mystringtohash') }}
+```
+
+#### formatName(name)
+
+**Parameter**: `name`
+**Type**: `String`
+**Example**: `Joy Sampaio`
+
+
+The `formatName` method is responsible for return a name and lastname
+
+How to use this method
+
+```html
+{{ formatName('Joy Sampaio') }} // { name: 'Joy', lastname: 'Sampaio' }
+```
+
+## Addons in Controllers
+
+#### res.sendResponse(statusCode, payload)
+
+**Parameter**: `statusCode`
+**Type**: `Number`
+**Example**: `200`
+
+
+**Parameter**: `payload`
+**Type**: `Object`
+**Example**: 
+```javascript
+{
+    msg: 'Testing Joy.js'
+}
+```
+
+The `sendResponse` method is responsible for send a custom jsonp response
+
+How to use this method
+
+```javascript
+function(req, res) {
+    return res.sendResponse(200, {msg: 'Testing Joy.js'});
+}
+```
+
+#### res.sendMail(subject, email, templatePath, data)
+
+**Parameter**: `subject`
+**Type**: `String`
+**Example**: `My Email Subject`
+
+
+**Parameter**: `email`
+**Type**: `String`
+**Example**: `example@example.com`
+
+
+**Parameter**: `templatePath`
+**Type**: `String`
+**Example**: `mail/example`
+
+
+**Parameter**: `data`
+**Type**: `Object`
+**Example**:
+```javascript
+{
+    name: 'Joy Sampaio',
+    msg: 'Welcome'
+}
+```
+
+The `getCaptcha` method is responsible for generate a recaptcha form
+
+How to use this method
+
+```javascript
+function(req, res) {
+    res.sendMail('My Email Subject', 'example@example.com', 'mail/example', {
+        name: 'Joy Sampaio',
+        msg: 'Welcome'
+    });
+}
+```
+
+#### req.getCaptcha(callback)
+
+**Parameter**: `callback`
+**Type**: `Function`
+**Example**: 
+```javascript
+function(html) {
+    console.log(html);
+}
+```
+
+The `getCaptcha` method is responsible for generate a recaptcha form
+
+How to use this method
+
+```javascript
+function(req, res) {
+    return req.getCaptcha(function(html) {
+        res.send(html);
+    });
+}
+```
+
+#### req.validateCaptcha(callback, isNative)
+
+**Parameter**: `callback`
+**Type**: `Function`
+**Example**: 
+```javascript
+function(err, isValid) {
+    if(err) {
+        throw err;
+    }
+    if(isValid) {
+        console.log('valid');
+    }
+    else {
+        console.log('invalid');
+    }
+}
+```
+
+**Parameter**: `isNative`
+**Type**: `Boolean`
+**Example**: `true`
+
+
+The `validateCaptcha` method is responsible for validate a recaptcha
+
+How to use this method
+
+```javascript
+function(req, res) {
+    return req.validateCaptcha(function(err, isValid) {
+        if(err) {
+            throw err;
+        }
+        if(isValid) {
+            console.log('valid');
+        }
+        else {
+            console.log('invalid');
+        }
+    }, true);
+}
+```
 
 ## Contributing
 

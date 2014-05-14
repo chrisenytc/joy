@@ -5,8 +5,7 @@
  * @description :: Contains logic for handling auth requests.
  */
 
-var passport = require('passport'),
-    utils = require('../../utils.js');
+var passport = require('passport');
 
 module.exports = {
 
@@ -31,7 +30,7 @@ module.exports = {
                     return res.serverError(err);
                 }
                 //Generate token
-                var token = utils.unique_token();
+                var token = UtilsService.unique_token();
                 Activate.create({
                     email: user.email,
                     token: token

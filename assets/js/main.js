@@ -1,7 +1,7 @@
 'use strict';
 
 //Root Application
-window.app = angular.module('Joypp', ['ngRoute', 'ngResource', 'ngMd5']);
+window.app = angular.module('JoyApp', ['ngRoute', 'ngResource', 'ngMd5', 'vcRecaptcha']);
 //Configuration
 window.app.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
@@ -45,7 +45,7 @@ window.app.config(['$routeProvider', '$locationProvider',
     }
 ]);
 
-// Bootstrap
+
 angular.element(document).ready(function() {
     angular.bootstrap(document, ['JoyApp']);
 });

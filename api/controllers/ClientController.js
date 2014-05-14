@@ -15,8 +15,6 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
-var utils = require('../../utils.js');
-
 module.exports = {
 
 
@@ -78,8 +76,6 @@ module.exports = {
         //Create a new client
         Client.create({
             name: req.body.name,
-            clientId: utils.uid(16),
-            clientSecret: utils.unique_token(),
             redirectURI: req.body.redirectURI,
             userId: req.user.id
         }).done(function(err, client) {

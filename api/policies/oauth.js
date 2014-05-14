@@ -13,10 +13,11 @@ module.exports = function(req, res, next) {
         'bearer',
         function(err, user, info) {
             if ((err) || (!user)) {
-                return res.jsonp({msg: 'Bad Authentication. You do not have permission to access the API!'});
+                return res.sendResponse({msg: 'Bad Authentication. You do not have permission to access the API!'});
             }
             delete req.query.access_token;
             req.user = user;
+            req.authInfo = info;
             return next();
         }
     )(req, res);

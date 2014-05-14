@@ -11,6 +11,7 @@
  * http://sailsjs.org/#documentation
  */
 
+var requiresScope = require('../api/policies/requiresScope.js');
 
 module.exports.policies = {
 
@@ -19,7 +20,8 @@ module.exports.policies = {
     '*': false,
 
     'Index': {
-        '*': 'requiresLogin'
+        'index': 'requiresLogin',
+        'info': ['oauth', requiresScope('user')]
     },
 
     'Auth': {

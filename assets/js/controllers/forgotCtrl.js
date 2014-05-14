@@ -1,9 +1,12 @@
 'use strict';
 
-app.controller('forgotCtrl', ['$scope', '$http', '$location', '$routeParams', '$settings',
-    function activateCtrl($scope, $http, $location, $routeParams, $settings) {
+app.controller('forgotCtrl', ['$scope', '$http', '$location', '$routeParams', '$settings', 'vcRecaptchaService',
+    function activateCtrl($scope, $http, $location, $routeParams, $settings, vcRecaptchaService) {
 
-        $scope.user = {};
+        $scope.user = {},
+        $scope.recaptcha = {
+            key: '6LeYhvMSAAAAALKpLXVHgiM_W_WovgVaY4DnxoIK'
+        };
 
         $scope.isToken = function() {
             if ($location.search().token && $location.search().token.length > 1) {
@@ -47,8 +50,7 @@ app.controller('forgotCtrl', ['$scope', '$http', '$location', '$routeParams', '$
 
                 $scope.loading = true;
                 var forgotUser = $scope.user;
-                forgotUser.sckey = $('input[name="sckey"]').val();
-                forgotUser.scvalue = $('input[name="scvalue"]').val();
+                forgotUser.recaptcha = vcRecaptchaService.data();
                 $http.post($settings.apiUri + '/forgot', forgotUser)
                     .success(function(data, status) {
                         if (status == 200) {
@@ -71,6 +73,7 @@ app.controller('forgotCtrl', ['$scope', '$http', '$location', '$routeParams', '$
                             message: data.errors
                         };
                         $scope.loading = false;
+                        vcRecaptchaService.reload();
                     });
             }
         };

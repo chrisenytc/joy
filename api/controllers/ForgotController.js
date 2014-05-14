@@ -15,7 +15,6 @@
  * @docs        :: http://sailsjs.org/#!documentation/controllers
  */
 
-var utils = require('../../utils.js');
 
 module.exports = {
 
@@ -51,7 +50,7 @@ module.exports = {
                     return res.serverError('This email is invalid!');
                 }
                 //Generate token
-                var token = utils.unique_token();
+                var token = UtilsService.unique_token();
                 Forgot.create({
                     email: user.email,
                     token: token

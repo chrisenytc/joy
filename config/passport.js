@@ -1,9 +1,10 @@
-var passport = require('passport'),
+var bcrypt = require('bcrypt'),
+    moment = require('moment'),
+    passport = require('passport'),
     BearerStrategy = require('passport-http-bearer').Strategy,
     BasicStrategy = require('passport-http').BasicStrategy,
     LocalStrategy = require('passport-local').Strategy,
     ClientPasswordStrategy = require('passport-oauth2-client-password').Strategy;
-
 
 passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -28,26 +29,32 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
-}, function(req, email, password, done) {
+}, function(req, username, password, done) {
     User.findOne({
-        email: email
+        email: username
     }).done(function(err, user) {
         if (err) {
             return done(err);
         }
         if (!user) {
             return done(
-                null, false, req.flash('error', 'Unknown user ' + email));
-        }
-        if (!user.checkPassword(password)) {
-            return done(
-                null, false, req.flash('error', 'Invalid password!'));
+                null, false, req.flash('error', 'Unknown user ' + username));
         }
         if (!user.status) {
             return done(
                 null, false, req.flash('alert', 'You need to active your account to login!'));
         }
-        return done(null, user);
+        bcrypt.compare(password, user.hashedPassword, function(err, res) {
+            if (err) {
+                return done(err, null);
+            }
+            if (!res) {
+                return done(null, false, {
+                    message: 'Invalid password'
+                });
+            } 
+            return done(null, user);
+        });
     });
 }));
 
@@ -62,41 +69,51 @@ passport.use(new LocalStrategy({
  * to the `Authorization` header).  While this approach is not recommended by
  * the specification, in practice it is quite common.
  */
-passport.use(new BasicStrategy(
-    function(username, password, done) {
-        User.findOne({
-            email: username
-        }, function(err, user) {
-            if (err) {
-                return done(err);
-            }
-            if (!user) {
-                return done(null, false);
-            }
-            if (!user.checkPassword(password)) {
-                return done(null, false);
-            }
-            return done(null, user);
-        });
-    }));
+passport.use(new BasicStrategy(function(username, password, done) {
 
-passport.use(new ClientPasswordStrategy(
-    function(clientId, clientSecret, done) {
-        Client.findOne({
-            clientId: clientId
-        }, function(err, client) {
+    User.findOne({
+        email: username
+    }, function(err, user) {
+
+        if (err) {
+            return done(err);
+        }
+        if (!user) {
+            return done(null, false);
+        }
+        bcrypt.compare(password, user.hashedPassword, function(err, res) {
             if (err) {
-                return done(err);
+                return done(err, null);
+            } else {
+                if (!res) {
+                    return done(null, false, {
+                        message: 'Invalid password'
+                    });
+                } else {
+                    return done(null, user);
+                }
             }
-            if (!client) {
-                return done(null, false);
-            }
-            if (client.clientSecret != clientSecret) {
-                return done(null, false);
-            }
-            return done(null, client);
         });
-    }));
+    });
+}));
+
+passport.use(new ClientPasswordStrategy(function(clientId, clientSecret, done) {
+
+    Client.findOne({
+        clientId: clientId
+    }, function(err, client) {
+        if (err) {
+            return done(err);
+        }
+        if (!client) {
+            return done(null, false);
+        }
+        if (client.clientSecret != clientSecret) {
+            return done(null, false);
+        }
+        return done(null, client);
+    });
+}));
 
 /**
  * BearerStrategy
@@ -106,25 +123,44 @@ passport.use(new ClientPasswordStrategy(
  * application, which is issued an access token to make requests on behalf of
  * the authorizing user.
  */
-passport.use(new BearerStrategy(
-    function(accessToken, done) {
-        Token.findOne({
-            token: accessToken
-        }, function(err, token) {
-            if (err) {
-                return done(err);
-            }
-            if (!token) {
-                return done(null, false);
-            }
-            var info = {
-                scope: '*'
-            }
-            User.findOne({
-                id: token.userId
-            }).done(function(err, user) {
-                return done(err, user, info);
+passport.use(new BearerStrategy(function(accessToken, done) {
+
+    AccessToken.findOne({
+        token: accessToken
+    }, function(err, token) {
+        if (err) {
+            return done(err);
+        }
+        if (!token) {
+            return done(null, false);
+        }
+
+        var now = moment().unix();
+        var creationDate = moment(token.createdAt).unix();
+
+        if (now - creationDate > sails.config.oauth.tokenLife) {
+            AccessToken.destroy({
+                token: accessToken
+            }, function(err) {
+                if (err) {
+                    return done(err);
+                }
             });
-        });
-    }
-));
+            return done(null, false, {
+                message: 'Token expired'
+            });
+        }
+
+        var info = {
+            scope: token.scope
+        };
+        User.findOne({
+            id: token.userId
+        })
+            .done(function(err, user) {
+                User.findOne({
+                    id: token.userId
+                }, done(err, user, info));
+            });
+    });
+}));

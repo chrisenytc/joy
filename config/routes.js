@@ -37,6 +37,11 @@ module.exports.routes = {
         action: 'index'
     },
 
+    '/api/info': {
+        controller: 'Index',
+        action: 'info'
+    },
+
     'post /signup': {
         controller: 'Auth',
         action: 'create'

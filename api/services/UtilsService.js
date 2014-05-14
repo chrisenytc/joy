@@ -22,6 +22,18 @@ exports.uid = function(len) {
     return buf.join('');
 };
 
+exports.uidLight = function(len) {
+  var buf = []
+    , chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+    , charlen = chars.length;
+
+  for (var i = 0; i < len; ++i) {
+    buf.push(chars[getRandomInt(0, charlen - 1)]);
+  }
+
+  return buf.join('');
+};
+
 /**
  * Return a unique_token identifier in database
  *
