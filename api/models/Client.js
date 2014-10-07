@@ -11,16 +11,16 @@ module.exports = {
     attributes: {
 
         name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
 
         clientId: 'string',
-        
+
         clientSecret: 'string',
 
         redirectURI: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
 

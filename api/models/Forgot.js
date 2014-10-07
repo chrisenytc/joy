@@ -11,12 +11,12 @@ module.exports = {
     attributes: {
 
         email: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
 
         token: {
-            type: 'STRING',
+            type: 'string',
             required: true,
             unique: true
         }
