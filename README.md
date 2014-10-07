@@ -8,6 +8,23 @@ Install dependencies
 
 `sudo npm install`
 
+Configure Environment Variables
+
+```
+NODE_ENV // production or development (optional)
+PORT // port (optional)
+MAIL_EMAIL // gmail account
+MAIL_PASSWORD // gmail password
+RECAPTCHA_PUBLIC_KEY // recaptcha public key
+RECAPTCHA_PRIVATE_KEY // recaptcha private key
+MONGOLAB_URI // mongolab (optional)
+MONGOHQ_URL // mongohq (optional)
+```
+
+Configure AngularJS Settings
+
+See more `assets/js/services/settingsConstant.js`
+
 Build Project
 
 `grunt`
