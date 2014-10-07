@@ -113,7 +113,8 @@ module.exports = {
         passport.authenticate(
             'local',
             function(err, user, info) {
-                if ((err) || (!user)) {
+                if (err || !user) {
+                    req.flash('error', 'Invalid Password!');
                     return res.redirect('/login?redirect=' + req.body.redirect);
                 }
                 // use passport to log in the user using a local method
