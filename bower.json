@@ -9,5 +9,8 @@
         "angular-resource": "~1.2.16",
         "angular-md5": "~0.1.7",
         "angular-recaptcha": "~1.0.1"
+    },
+    "resolutions": {
+      "angular": "1.2.26"
     }
 }

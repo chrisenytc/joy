@@ -13,12 +13,12 @@ module.exports = {
     attributes: {
 
         name: {
-            type: 'STRING',
+            type: 'string',
             required: true
         },
 
         email: {
-            type: 'STRING',
+            type: 'string',
             required: true,
             unique: true
         },
@@ -28,7 +28,7 @@ module.exports = {
         },
 
         status: {
-            type: 'BOOLEAN',
+            type: 'boolean',
             defaultsTo: false
         },
 

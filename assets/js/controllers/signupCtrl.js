@@ -6,7 +6,7 @@ app.controller('signupCtrl', ['$scope', '$http', '$settings', 'vcRecaptchaServic
         var $ = jQuery;
         $scope.user = {},
         $scope.recaptcha = {
-            key: '6LeYhvMSAAAAALKpLXVHgiM_W_WovgVaY4DnxoIK'
+            key: $settings.recaptcha
         };
 
         $scope.submit = function(isValid) {

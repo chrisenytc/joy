@@ -5,7 +5,7 @@ app.controller('forgotCtrl', ['$scope', '$http', '$location', '$routeParams', '$
 
         $scope.user = {},
         $scope.recaptcha = {
-            key: '6LeYhvMSAAAAALKpLXVHgiM_W_WovgVaY4DnxoIK'
+            key: $settings.recaptcha
         };
 
         $scope.isToken = function() {
